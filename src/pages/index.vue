@@ -26,7 +26,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/store/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { computed } from 'vue';
 
 export default {

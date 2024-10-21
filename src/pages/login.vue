@@ -53,7 +53,7 @@
 
 <script>
   import { useRouter } from 'vue-router';
-  import { useAuthStore } from '@/store/auth';
+  import { useAuthStore } from '@/stores/auth.store';
   import { authService } from '@/services/authService';
 
   export default {
