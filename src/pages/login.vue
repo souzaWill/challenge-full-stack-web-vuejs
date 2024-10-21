@@ -78,7 +78,7 @@
         try {
           const { data } = await authService.login(this.email, this.password);
           
-          this.authStore.setAuth(data.token, data.userName);
+          this.authStore.setAuth(data.token, data.name);
 
           this.router.push({ path: '/' }); 
         } catch (error) {

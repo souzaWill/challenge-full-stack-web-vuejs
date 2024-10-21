@@ -2,12 +2,34 @@
 /**
  * router/index.ts
  *
- * Automatic routes for `./src/pages/*.vue`
  */
 
 // Composables
+import Index from '@/pages/index.vue';
+import Login from '@/pages/login.vue';
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+
+const routes = [
+  {
+    path: '/login',
+    component: Login,
+  },
+  {
+    path: '/',
+    component: Index,
+    children: [
+      {
+        path: '/students',
+        component: Index,
+      },
+    ],
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/login',
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +50,15 @@ router.onError((err, to) => {
     console.error(err)
   }
 })
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('token');
+  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
+});
 
 router.isReady().then(() => {
   localStorage.removeItem('vuetify:dynamic-reload')
