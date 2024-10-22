@@ -5,7 +5,7 @@
  */
 
 // Composables
-import Index from '@/pages/index.vue';
+import HomePage from '@/pages/HomePage.vue';
 import Login from '@/pages/LoginPage.vue';
 import { createRouter, createWebHistory } from 'vue-router/auto'
 
@@ -15,14 +15,8 @@ const routes = [
     component: Login,
   },
   {
-    path: '/',
-    component: Index,
-    children: [
-      {
-        path: '/students',
-        component: Index,
-      },
-    ],
+    path: '/home',
+    component: HomePage,
     meta: { requiresAuth: true },
   },
   {

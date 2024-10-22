@@ -47,7 +47,6 @@
 <script>
   import { useRouter } from 'vue-router';
   import { useAuthStore } from '@/stores/auth.store';
-  import { authService } from '@/services/authService';
 
   export default {
     data() {
@@ -66,18 +65,9 @@
     },
     methods: {
       async handleLogin() {
-        this.errorMessage = null;
-
-        try {
-          const { data } = await authService.login(this.email, this.password);
-          
-          this.authStore.setAuth(data.token, data.name);
-
-          this.router.push({ path: '/' }); 
-        } catch (error) {
-          //TODO: melhoria exibicao de erros
-          this.errorMessage = error.response?.data?.message || 'Ocorreu um erro no login.';
-        }
+        await this.authStore.login(this.email, this.password);
+        this.errorMessage = this.authStore.error; 
+        this.errorMessage || this.router.push({ path: '/home' }); 
       },
       toggleVisible() {
         this.visible = !this.visible;
