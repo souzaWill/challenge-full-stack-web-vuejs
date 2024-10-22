@@ -6,7 +6,7 @@
 
 // Composables
 import Index from '@/pages/index.vue';
-import Login from '@/pages/login.vue';
+import Login from '@/pages/LoginPage.vue';
 import { createRouter, createWebHistory } from 'vue-router/auto'
 
 const routes = [

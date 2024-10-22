@@ -1,16 +1,9 @@
 <template>
   <div>
-    <v-img 
-      class="mx-auto my-6" 
-      max-width="228"
-      src="@/assets/logo.svg" 
-    />
-
+    <CompanyLogo/>
     <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
       
-      <v-alert v-if="errorMessage" type="error" class="mb-4">
-        {{ errorMessage }}
-      </v-alert>
+      <ErrorAlert :message="errorMessage" />
 
       <form @submit.prevent="handleLogin">
         <div class="text-subtitle-1 text-medium-emphasis">
