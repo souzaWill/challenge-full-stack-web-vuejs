@@ -24,7 +24,7 @@ export const useAuthStore = defineStore('auth', {
     async login(email, password) {
       try {
         const { data } = await authService.login(email, password);
-        this.setAuth(data.toke, data.password);
+        this.setAuth(data.token, data.name);
 
         this.error = null;
       } catch (err) {

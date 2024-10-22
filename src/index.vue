@@ -1,7 +1,5 @@
 <template>
-  <MainLayout>
-
-    <v-container>
+        <v-container>
             <v-row>
                 <v-col cols="12">
                     <v-card>
@@ -10,20 +8,13 @@
                         <v-card-text>
                             <v-row>
                                 <v-col align-self="start" cols="12" sm="8">
-                                    <v-text-field 
-                                        v-model="search" 
-                                        append-inner-icon="mdi-magnify" 
-                                        density="compact"
-                                        label="Digite sua busca" 
-                                        variant="solo" 
-                                        hide-details 
-                                        single-line
-                                        @click:append-inner="fetchStudents">
-                                    </v-text-field>
+                                    <v-text-field append-inner-icon="mdi-magnify" density="compact"
+                                        label="Digite sua busca" variant="solo" hide-details single-line
+                                        @click:append-inner="loadItems"></v-text-field>
                                 </v-col>
 
                                 <v-col align-self="end" cols="12" sm="4">
-                                    <!-- <v-dialog max-width="500px" v-model="dialog">
+                                    <v-dialog max-width="500px" v-model="dialog">
                                         <template v-slot:activator="{ props: activatorProps }">
                                             <v-btn v-bind="activatorProps" block class="mb-8" color="blue" size="large"
                                                 variant="tonal">
@@ -53,7 +44,7 @@
                                                 <v-btn color="blue darken-1" text @click="saveStudent">Salvar</v-btn>
                                             </v-card-actions>
                                         </v-card>
-                                    </v-dialog> -->
+                                    </v-dialog>
                                 </v-col>
                             </v-row>
                         </v-card-text>
@@ -61,11 +52,12 @@
                         <v-card-text>
                             <v-row>
                                 <v-col cols="12">
-                                    <v-data-table :headers="headers" :items="students" :items-per-page="perPage"
-                                        :loading="loading" @update:options="fetchStudents">
+                                    <v-data-table :headers="headers" :items="serverItems" :items-per-page="itemsPerPage"
+                                        :loading="loading" @update:options="loadItems">
                                         <template v-slot:[`item.actions`]="{ item }">
-                                            <v-icon class="me-2" size="small">mdi-pencil</v-icon>
-                                            <v-icon size="small">mdi-delete</v-icon>
+                                            <v-icon class="me-2" size="small"
+                                                @click="editItem(item)">mdi-pencil</v-icon>
+                                            <v-icon size="small" @click="openDeleteDialog(item)">mdi-delete</v-icon>
                                         </template>
                                     </v-data-table>
                                 </v-col>
@@ -75,53 +67,79 @@
                 </v-col>
             </v-row>
 
-
+            <v-dialog v-model="dialogDelete" max-width="400px">
+                <v-card>
+                    <v-card-title class="text-h5">Confirmação</v-card-title>
+                    <v-card-text>Tem certeza que deseja excluir o estudante "{{ selectedStudent.name }}"?</v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="dialogDelete = false">Cancelar</v-btn>
+                        <v-btn color="blue darken-1" text @click="deleteItemConfirm">Confirmar</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-container>
-
-  </MainLayout>
 </template>
 
-<script>
-  import { studentsService } from '@/services/studentsService'
+<script setup>
+    import { ref } from 'vue';
 
-  export default {
-    data() {
-      return {
-        perPage: 10,
-        search: '',
-        students: [],
-        loading: false,
-        dialog: false,
-        valid: false,
-        showConfirmDelete: false,
-        selectedStudent: null,
-        headers: [
-          { title: 'id', align: 'start', key: 'id' },
-          { title: 'RA', align: 'start', key: 'registration_number' },
-          { title: 'CPF', align: 'start', key: 'document' },
-          { title: 'Ações', key: 'actions', align: 'start' },
-        ]
-      };
-    },
-    methods: {
-      async fetchStudents(options) {
-        const { page, perPage } = options;
-        //TODO: adicionar paginacao no backend
-        //estudar uso de dtos
-        this.loading = true
-        const response = await studentsService.get({
-            page,
-            perPage,
-            search: this.search
-        });
+    const itemsPerPage = ref(5);
+    const serverItems = ref([]);
+    const loading = ref(true);
+    const dialog = ref(false);
+    const valid = ref(false);  
+    const dialogDelete = ref(false);  
 
-        this.students = response.data.map(student => ({
-            id: student.id,
-            registration_number: student.registration_number,
-            document: student.document
-        }));
-        this.loading = false
-      },
-    },
-  };
+    const newStudent = ref({
+        name: '',
+        ra: '',
+        cpf: ''
+    });
+
+    const selectedStudent = ref({});
+
+    const fakeData = ref([
+        { ra: 'F1231321', name: 'Willian', cpf: '11111' },
+    ]);
+
+    const headers = ref([
+        { title: 'RA', align: 'start', key: 'ra' },
+        { title: 'Nome', align: 'start', key: 'name' },
+        { title: 'CPF', align: 'start', key: 'cpf' },
+        { title: 'Ações', key: 'actions', align: 'start' },
+    ]);
+
+    const loadItems = () => {
+        loading.value = true;
+        serverItems.value = fakeData.value;
+        loading.value = false;
+    };
+
+    const saveStudent = () => {
+        if (valid.value) {
+            fakeData.value.push({ ...newStudent.value });
+            dialog.value = false;
+            newStudent.value = { name: '', ra: '', cpf: '' };
+            loadItems();
+        }
+    };
+
+    const openDeleteDialog = (item) => {
+        selectedStudent.value = { ...item };
+        dialogDelete.value = true;
+    };
+
+    const deleteItemConfirm = () => {
+        fakeData.value = fakeData.value.filter(student => student.ra !== selectedStudent.value.ra);
+        dialogDelete.value = false;
+        loadItems();
+    };
+
+    const editItem = (item) => {
+        newStudent.value = { ...item };
+        dialog.value = true;
+    };
+
+    loadItems();
 </script>
