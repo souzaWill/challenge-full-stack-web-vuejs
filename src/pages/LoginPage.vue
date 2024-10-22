@@ -1,16 +1,9 @@
 <template>
   <div>
-    <v-img 
-      class="mx-auto my-6" 
-      max-width="228"
-      src="https://maisaedu.com.br/hubfs/site-grupo-a/logo-mais-a-educacao.svg">
-    </v-img>
-
+    <CompanyLogo/>
     <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
       
-      <v-alert v-if="errorMessage" type="error" class="mb-4">
-        {{ errorMessage }}
-      </v-alert>
+      <ErrorAlert :message="errorMessage" />
 
       <form @submit.prevent="handleLogin">
         <div class="text-subtitle-1 text-medium-emphasis">
@@ -53,8 +46,7 @@
 
 <script>
   import { useRouter } from 'vue-router';
-  import { useAuthStore } from '@/store/auth';
-  import { authService } from '@/services/authService';
+  import { useAuthStore } from '@/stores/auth.store';
 
   export default {
     data() {
@@ -73,18 +65,9 @@
     },
     methods: {
       async handleLogin() {
-        this.errorMessage = null;
-
-        try {
-          const { data } = await authService.login(this.email, this.password);
-          
-          this.authStore.setAuth(data.token, data.userName);
-
-          this.router.push({ path: '/' }); 
-        } catch (error) {
-          //TODO: melhoria exibicao de erros
-          this.errorMessage = error.response?.data?.message || 'Ocorreu um erro no login.';
-        }
+        await this.authStore.login(this.email, this.password);
+        this.errorMessage = this.authStore.error; 
+        this.errorMessage || this.router.push({ path: '/home' }); 
       },
       toggleVisible() {
         this.visible = !this.visible;
