@@ -23,7 +23,7 @@
                 </v-col>
   
                 <v-col align-self="end" cols="12" sm="4">
-                  <v-btn block class="mb-8" color="blue" size="large" variant="tonal" @click="OpenCreateDialog()">
+                  <v-btn block class="mb-8" color="blue" size="large" variant="tonal" @click="openCreateDialog()">
                     Novo Estudante
                   </v-btn>
                 </v-col>
@@ -54,7 +54,7 @@
       </v-row>
   
       <v-dialog max-width="500px" v-model="createDialog">
-        <FormStudents @close="closeDialog(true)"></FormStudents>
+        <FormStudents @close="closeCreateDialog(true)"></FormStudents>
       </v-dialog>
   
       <v-dialog max-width="500px" v-model="editDialog">
@@ -97,11 +97,14 @@
     setup() {
       const studentsStore = useStudentsStore();
       const { t } = useI18n();
+
       return { studentsStore, t };
     },
     methods: {
       async loadStudents({ page, itemsPerPage }) {
         try {
+          itemsPerPage = itemsPerPage == -1 ? null : itemsPerPage
+
           await this.studentsStore.fetchStudents(page, itemsPerPage, this.search);
         } catch (error) {
           console.error(error);

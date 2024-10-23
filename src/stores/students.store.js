@@ -8,14 +8,14 @@ export const useStudentsStore = defineStore("students", {
     totalItems: 0,
   }),
   actions: {
-    async fetchStudents(page, itemsPerPage, search) {
+    async fetchStudents(page, per_page, search) {
       const { data, meta } = await studentsService.get({
         page,
-        itemsPerPage,
+        per_page,
         search,
       });
       this.students = StudentDTO.fromArray(data);
-      this.totalItems = meta?.total;
+      this.totalItems = per_page == null ? this.students.length : meta?.total;
     },
     async create(student) {
       const { data } = await studentsService.create(student)
