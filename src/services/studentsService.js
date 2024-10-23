@@ -21,8 +21,12 @@ export const studentsService = {
     return response.data;
   },
   async update(id, data) {
-    console.log(id);
-    console.log(data);
+    const authStore = useAuthStore();
+    let headers = { Authorization: `Bearer ${authStore.token}` };
+    let config = { headers };
+
+    const response = await axios.put(`${ENDPOINT}/${id}`, data, config);
+    return response.data;
   },
   async delete(id) {
     console.log(id);

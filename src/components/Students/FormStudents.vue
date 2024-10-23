@@ -72,7 +72,7 @@
       },
       createOrUpdate() {
         if (this.localStudent.id) {
-          console.log("Estudante atualizado:", this.localStudent);
+          this.studentsStore.update(this.localStudent)
         } else {
           this.studentsStore.create(this.localStudent)
         }

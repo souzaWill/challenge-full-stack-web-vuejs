@@ -54,11 +54,11 @@
       </v-row>
   
       <v-dialog max-width="500px" v-model="dialog">
-        <FormStudents @close="dialog = false"></FormStudents>
+        <FormStudents @close="closeDialog(true)"></FormStudents>
       </v-dialog>
   
       <v-dialog max-width="500px" v-model="editDialog">
-        <FormStudents :student="selectedStudent" @close="editDialog = false"></FormStudents>
+        <FormStudents :student="selectedStudent" @close="closeEditDialog(true)"></FormStudents>
       </v-dialog>
     </v-container>
   </template>
@@ -110,6 +110,18 @@
         console.log(student);
         this.editDialog = true;
       },
+      closeDialog(reload = false){
+        this.dialog = false;
+        if(reload){
+          this.loadStudents({ page:1, itemsPerPage:this.itemsPerPage })
+        }
+      },
+      closeEditDialog(reload = false){
+        this.editDialog = false;
+        if(reload){
+          this.loadStudents({ page:1, itemsPerPage:this.itemsPerPage })
+        }
+      }
     },
   };
   </script>

@@ -20,6 +20,12 @@ export const useStudentsStore = defineStore("students", {
     async create(student) {
       const { data } = await studentsService.create(student)
       this.students.push(new StudentDTO(data))
+    },
+    async update(student) {
+      const { data } = await studentsService.update(student.id, student)
+      
+      let indexStoredStudent = this.students.findIndex(StoredStudent => StoredStudent.id === student.id)
+      this.students[indexStoredStudent] = new StudentDTO(data)
     }
   },
 });
