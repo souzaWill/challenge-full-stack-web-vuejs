@@ -5,7 +5,7 @@
       <v-navigation-drawer app v-model="drawer" color="primary lighten-4">
         <v-list>
           <v-list-item link @click="navigate('/home')">
-            <v-list-item-title>Estudantes</v-list-item-title>
+            <v-list-item-title>{{$t('Students')}}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-navigation-drawer>

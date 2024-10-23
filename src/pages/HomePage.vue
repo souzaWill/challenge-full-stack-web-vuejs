@@ -5,7 +5,7 @@
             <v-row>
                 <v-col cols="12">
                     <v-card>
-                        <v-toolbar color="white" title="Consulta de alunos"></v-toolbar>
+                        <v-toolbar color="white" :title="$t('Student Inquiry')"></v-toolbar>
 
                         <v-card-text>
                             <v-row>
@@ -14,7 +14,7 @@
                                         v-model="search" 
                                         append-inner-icon="mdi-magnify" 
                                         density="compact"
-                                        label="Digite sua busca" 
+                                        :placeholder="$t('Enter your search')"
                                         variant="solo" 
                                         hide-details 
                                         single-line
@@ -89,6 +89,7 @@
 
 <script>
   import { useStudentsStore } from '@/stores/students.store';
+  import { useI18n } from 'vue-i18n';
 
   export default {
     data() {
@@ -103,16 +104,16 @@
             headers: [
                 { title: 'id', align: 'start', key: 'id' },
                 { title: 'RA', align: 'start', key: 'registration_number' },
-                { title: 'Nome', align: 'start', key: 'name' },
-                { title: 'CPF', align: 'start', key: 'document' },
-                { title: 'Ações', key: 'actions', align: 'start' },
+                { title: this.t('Name'), align: 'start', key: 'name' },
+                { title: this.t('Document'), align: 'start', key: 'document' },
+                { title: this.t('Actions'), key: 'actions', align: 'start' },
             ]
         };
     },
     setup() {
         const studentsStore = useStudentsStore();
-
-        return { studentsStore };
+        const { t } = useI18n();
+        return { studentsStore, t };
     },
     methods: {
         async loadStudents({ page, itemsPerPage }) {
