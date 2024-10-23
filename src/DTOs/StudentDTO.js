@@ -1,8 +1,9 @@
 export class StudentDTO {
   constructor({ id, registration_number, document, user }) {
     this.id = id;
-    this.registration_number = registration_number;
     this.name = user.name;
+    this.email = user.email;
+    this.registration_number = registration_number;
     this.document = document;
   }
 
