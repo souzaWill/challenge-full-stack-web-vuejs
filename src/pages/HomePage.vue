@@ -18,7 +18,8 @@
                                         variant="solo" 
                                         hide-details 
                                         single-line
-                                        @click:append-inner="fetchStudents">
+                                        @keyup.enter="loadStudents"
+                                        @click:append-inner="loadStudents">
                                     </v-text-field>
                                 </v-col>
 
@@ -61,13 +62,18 @@
                         <v-card-text>
                             <v-row>
                                 <v-col cols="12">
-                                    <v-data-table :headers="headers" :items="students" :items-per-page="perPage"
-                                        :loading="loading" @update:options="fetchStudents">
+                                    <v-data-table-server
+                                        :headers="headers" 
+                                        :items="studentsStore.students" 
+                                        v-model:items-per-page="itemsPerPage"
+                                        :items-length="studentsStore.totalItems"
+                                        :loading="loading" 
+                                        @update:options="loadStudents">
                                         <template v-slot:[`item.actions`]="{ item }">
                                             <v-icon class="me-2" size="small">mdi-pencil</v-icon>
                                             <v-icon size="small">mdi-delete</v-icon>
                                         </template>
-                                    </v-data-table>
+                                    </v-data-table-server>
                                 </v-col>
                             </v-row>
                         </v-card-text>
@@ -82,46 +88,40 @@
 </template>
 
 <script>
-  import { studentsService } from '@/services/studentsService'
+  import { useStudentsStore } from '@/stores/students.store';
 
   export default {
     data() {
-      return {
-        perPage: 10,
-        search: '',
-        students: [],
-        loading: false,
-        dialog: false,
-        valid: false,
-        showConfirmDelete: false,
-        selectedStudent: null,
-        headers: [
-          { title: 'id', align: 'start', key: 'id' },
-          { title: 'RA', align: 'start', key: 'registration_number' },
-          { title: 'CPF', align: 'start', key: 'document' },
-          { title: 'Ações', key: 'actions', align: 'start' },
-        ]
-      };
+        return {
+            search: '',
+            itemsPerPage: 10,
+            loading: false,
+            dialog: false,
+            valid: false,
+            showConfirmDelete: false,
+            selectedStudent: null,
+            headers: [
+                { title: 'id', align: 'start', key: 'id' },
+                { title: 'RA', align: 'start', key: 'registration_number' },
+                { title: 'Nome', align: 'start', key: 'name' },
+                { title: 'CPF', align: 'start', key: 'document' },
+                { title: 'Ações', key: 'actions', align: 'start' },
+            ]
+        };
+    },
+    setup() {
+        const studentsStore = useStudentsStore();
+
+        return { studentsStore };
     },
     methods: {
-      async fetchStudents(options) {
-        const { page, perPage } = options;
-        //TODO: adicionar paginacao no backend
-        //estudar uso de dtos
-        this.loading = true
-        const response = await studentsService.get({
-            page,
-            perPage,
-            search: this.search
-        });
-
-        this.students = response.data.map(student => ({
-            id: student.id,
-            registration_number: student.registration_number,
-            document: student.document
-        }));
-        this.loading = false
-      },
+        async loadStudents({ page, itemsPerPage }) {
+            try {
+                await this.studentsStore.fetchStudents(page, itemsPerPage, this.search);
+            } catch (error) {
+                console.error(error);
+            }
+        }
     },
   };
 </script>
