@@ -1,10 +1,15 @@
 {
-    "welcome": "Bem-vindo",
-    "hello": "Olá, {name}!",
-    "Email": "Email",
-    "Password": "Senha",
-    "Enter your password" : "Entre com sua senha",
-    "Log in" : "Entrar",
-    "Students" : "Estudantes"
+  "welcome": "Bem-vindo",
+  "hello": "Olá, {name}!",
+  "Email": "Email",
+  "Password": "Senha",
+  "Enter your password": "Entre com sua senha",
+  "Log in": "Entrar",
+  "Students": "Estudantes",
+  "Name": "Nome",
+  "Document": "CPF",
+  "Actions": "Ações",
+  "Student Inquiry": "Consulta de alunos",
+  "Enter your search": "Digite sua busca",
+  "Logout": "Sair"
 }
-  
