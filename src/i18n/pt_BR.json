@@ -13,5 +13,9 @@
   "Enter your search": "Digite sua busca",
   "Logout": "Sair",
   "Create student": "Cadastrar estudante",
-  "Edit student": "Editar estudante"
+  "Edit student": "Editar estudante",
+  "Are you sure you want to delete the student": "Tem certeza que deseja excluir o estudante",
+  "Confirmation" : "Confirmação",
+  "Confirm": "Confirmar",
+  "Cancel" : "Cancelar"
 }

@@ -23,7 +23,7 @@
                 </v-col>
   
                 <v-col align-self="end" cols="12" sm="4">
-                  <v-btn block class="mb-8" color="blue" size="large" variant="tonal" @click="openDialog">
+                  <v-btn block class="mb-8" color="blue" size="large" variant="tonal" @click="OpenCreateDialog()">
                     Novo Estudante
                   </v-btn>
                 </v-col>
@@ -43,7 +43,7 @@
                   >
                     <template v-slot:[`item.actions`]="{ item }">
                       <v-icon class="me-2" size="small" @click="openEditDialog(item)">mdi-pencil</v-icon>
-                      <v-icon size="small">mdi-delete</v-icon>
+                      <v-icon size="small" @click="openConfirmDeleteDialog(item)">mdi-delete</v-icon>
                     </template>
                   </v-data-table-server>
                 </v-col>
@@ -53,12 +53,16 @@
         </v-col>
       </v-row>
   
-      <v-dialog max-width="500px" v-model="dialog">
+      <v-dialog max-width="500px" v-model="createDialog">
         <FormStudents @close="closeDialog(true)"></FormStudents>
       </v-dialog>
   
       <v-dialog max-width="500px" v-model="editDialog">
         <FormStudents :student="selectedStudent" @close="closeEditDialog(true)"></FormStudents>
+      </v-dialog>
+
+      <v-dialog max-width="500px" v-model="confirmDeleteDialog">
+        <ConfirmDelete :student="selectedStudent" @close="closeConfirmDeleteDialog(true)"></ConfirmDelete>
       </v-dialog>
     </v-container>
   </template>
@@ -74,8 +78,9 @@
         search: "",
         itemsPerPage: 10,
         loading: false,
-        dialog: false,
+        createDialog: false,
         editDialog: false,
+        confirmDeleteDialog: false,
         selectedStudent: null,
         headers: [
           { title: "id", align: "start", key: "id" },
@@ -102,22 +107,31 @@
           console.error(error);
         }
       },
-      openDialog() {
-        this.dialog = true;
+      openCreateDialog() {
+        this.createDialog = true;
       },
       openEditDialog(student) {
         this.selectedStudent = student;
-        console.log(student);
         this.editDialog = true;
       },
-      closeDialog(reload = false){
-        this.dialog = false;
+      openConfirmDeleteDialog(student) {
+        this.selectedStudent = student;
+        this.confirmDeleteDialog = true;
+      },
+      closeCreateDialog(reload = false){
+        this.createDialog = false;
         if(reload){
           this.loadStudents({ page:1, itemsPerPage:this.itemsPerPage })
         }
       },
       closeEditDialog(reload = false){
         this.editDialog = false;
+        if(reload){
+          this.loadStudents({ page:1, itemsPerPage:this.itemsPerPage })
+        }
+      },
+      closeConfirmDeleteDialog(reload = false){
+        this.confirmDeleteDialog = false;
         if(reload){
           this.loadStudents({ page:1, itemsPerPage:this.itemsPerPage })
         }

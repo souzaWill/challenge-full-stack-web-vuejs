@@ -29,6 +29,11 @@ export const studentsService = {
     return response.data;
   },
   async delete(id) {
-    console.log(id);
+    const authStore = useAuthStore();
+    let headers = { Authorization: `Bearer ${authStore.token}` };
+    let config = { headers };
+
+    const response = await axios.delete(`${ENDPOINT}/${id}`,config);
+    return response;
   },
 };

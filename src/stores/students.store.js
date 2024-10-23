@@ -26,6 +26,9 @@ export const useStudentsStore = defineStore("students", {
       
       let indexStoredStudent = this.students.findIndex(StoredStudent => StoredStudent.id === student.id)
       this.students[indexStoredStudent] = new StudentDTO(data)
+    },
+    async delete(id) {
+      await studentsService.delete(id)
     }
   },
 });
