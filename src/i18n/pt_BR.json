@@ -1,16 +1,15 @@
 {
-    "welcome": "Bem-vindo",
-    "hello": "Olá, {name}!",
-    "Email": "Email",
-    "Password": "Senha",
-    "Enter your password" : "Entre com sua senha",
-    "Log in" : "Entrar",
-    "Students" : "Estudantes",
-    "Name" : "Nome",
-    "document" : "CPF",
-    "Actions": "Ações",
-    "Student Inquiry": "Consulta de alunos" ,
-    "Enter your search": "Digite sua busca",
-    "Logout" : "Sair"
+  "welcome": "Bem-vindo",
+  "hello": "Olá, {name}!",
+  "Email": "Email",
+  "Password": "Senha",
+  "Enter your password": "Entre com sua senha",
+  "Log in": "Entrar",
+  "Students": "Estudantes",
+  "Name": "Nome",
+  "document": "CPF",
+  "Actions": "Ações",
+  "Student Inquiry": "Consulta de alunos",
+  "Enter your search": "Digite sua busca",
+  "Logout": "Sair"
 }
-  
