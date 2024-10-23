@@ -13,7 +13,12 @@ export const studentsService = {
     return response.data;
   },
   async create(data) {
-    console.log(data);
+    const authStore = useAuthStore();
+    let headers = { Authorization: `Bearer ${authStore.token}` };
+    let config = { headers };
+
+    const response = await axios.post(ENDPOINT, data, config);
+    return response.data;
   },
   async update(id, data) {
     console.log(id);

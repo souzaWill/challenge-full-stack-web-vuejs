@@ -12,7 +12,10 @@
           <v-text-field 
             label="Email" 
             v-model="localStudent.email" 
-            :rules="[v => !!v || 'Email é obrigatório']"
+            :rules="[
+              v => !!v || 'Email é obrigatório',
+              v => /.+@.+\..+/.test(v) || 'Email inválido'
+            ]"
           ></v-text-field>
           <v-text-field 
             label="Registro Acadêmico (RA)" 
@@ -38,6 +41,8 @@
   </template>
   
   <script>
+  import { useStudentsStore } from "@/stores/students.store";
+
   export default {
     props: {
       student: {
@@ -56,6 +61,11 @@
         localStudent: { ...this.student }
       };
     },
+    setup() {
+      const studentsStore = useStudentsStore();
+      return { studentsStore };
+
+    },
     methods: {
       closeDialog() {
         this.$emit('close');
@@ -64,10 +74,10 @@
         if (this.localStudent.id) {
           console.log("Estudante atualizado:", this.localStudent);
         } else {
-          console.log("Novo estudante criado:", this.localStudent);
+          this.studentsStore.create(this.localStudent)
         }
         this.$emit('close');
-      }
+      },
     },
     watch: {
       student: {

@@ -17,5 +17,9 @@ export const useStudentsStore = defineStore("students", {
       this.students = StudentDTO.fromArray(data);
       this.totalItems = meta?.total;
     },
+    async create(student) {
+      const { data } = await studentsService.create(student)
+      this.students.push(new StudentDTO(data))
+    }
   },
 });
