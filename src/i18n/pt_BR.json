@@ -24,5 +24,6 @@
   "CPF number is required": "CPF é obrigatório",
   "Email is required": "Email é obrigatório",
   "Email is invalid": "Email é invalido",
-  "Name is required": "Nome é obrigatório"
+  "Name is required": "Nome é obrigatório",
+  "Password is required" : "senha é obrigatório"
 }
