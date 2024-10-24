@@ -11,7 +11,7 @@
 
       <form @submit.prevent="handleLogin">
         <div class="text-subtitle-1 text-medium-emphasis">
-          {{ $t("Email") }}
+          {{ $t('Email') }}
         </div>
 
         <v-text-field
@@ -27,7 +27,7 @@
         <div
           class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between"
         >
-          {{ $t("Password") }}
+          {{ $t('Password') }}
         </div>
 
         <v-text-field
@@ -51,7 +51,7 @@
           size="large"
           variant="tonal"
         >
-          {{ $t("Log in") }}
+          {{ $t('Log in') }}
         </v-btn>
       </form>
     </v-card>
@@ -59,14 +59,14 @@
 </template>
 
 <script>
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth.store";
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth.store';
 
 export default {
   data() {
     return {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       visible: false,
       errorMessage: null,
     };
@@ -81,7 +81,7 @@ export default {
     async handleLogin() {
       await this.authStore.login(this.email, this.password);
       this.errorMessage = this.authStore.error;
-      this.errorMessage || this.router.push({ path: "/home" });
+      this.errorMessage || this.router.push({ path: '/home' });
     },
     toggleVisible() {
       this.visible = !this.visible;

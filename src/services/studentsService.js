@@ -1,7 +1,7 @@
-import axios from "axios";
-import { useAuthStore } from "@/stores/auth.store";
+import axios from 'axios';
+import { useAuthStore } from '@/stores/auth.store';
 
-const ENDPOINT = "students";
+const ENDPOINT = 'students';
 
 export const studentsService = {
   async get(params = []) {
@@ -33,7 +33,7 @@ export const studentsService = {
     let headers = { Authorization: `Bearer ${authStore.token}` };
     let config = { headers };
 
-    const response = await axios.delete(`${ENDPOINT}/${id}`,config);
+    const response = await axios.delete(`${ENDPOINT}/${id}`, config);
     return response;
   },
 };
