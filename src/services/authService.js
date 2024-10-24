@@ -1,37 +1,16 @@
 import axios from 'axios';
-
-const API_URL = 'http://localhost/api'; 
+import { useAuthStore } from '@/stores/auth.store';
 
 export const authService = {
   async login(email, password) {
-    const response = await axios.post(
-      `${API_URL}/login`,
-      {
-        email,
-        password,
-      },
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      }
-    );
-    console.log(response);
+    const response = await axios.post('login', { email, password });
     return response.data;
   },
-  
+
   async logout() {
-    const response = await axios.post(
-      `${API_URL}/logout`, 
-      {},
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      }
-    );
+    const authStore = useAuthStore();
+    let headers = { Authorization: `Bearer ${authStore.token}` };
+    const response = await axios.post('logout', {}, { headers });
     return response.data;
-  }
+  },
 };
