@@ -6,11 +6,14 @@
     ></v-toolbar>
 
     <v-card-text>
+      <ErrorAlert :message="studentsStore.error" />
+
       <v-form ref="form" v-model="valid">
         <v-text-field
           :label="$t('Name')"
           v-model="localStudent.name"
           :rules="[(v) => !!v || $t('Name is required')]"
+          :error-messages="studentsStore.errors.name"
         ></v-text-field>
         <v-text-field
           :label="$t('Email')"
@@ -19,6 +22,7 @@
             (v) => !!v || $t('Email is required'),
             (v) => /.+@.+\..+/.test(v) || $t('Email is invalid'),
           ]"
+          :error-messages="studentsStore.errors.email"
         ></v-text-field>
         <v-text-field
           :label="$t('Registration number')"
@@ -31,6 +35,7 @@
               v.length === 8 ||
               $t('Registration number must be 8 characters long'),
           ]"
+          :error-messages="studentsStore.errors.registration_number"
         ></v-text-field>
         <v-text-field
           :label="$t('Document')"
@@ -38,6 +43,7 @@
           :readonly="!!localStudent.id"
           v-mask="'###.###.###-##'"
           :rules="[(v) => !!v || $t('CPF number is required')]"
+          :error-messages="studentsStore.errors.document"
         ></v-text-field>
       </v-form>
     </v-card-text>
@@ -76,6 +82,7 @@ export default {
   },
   setup() {
     const studentsStore = useStudentsStore();
+    studentsStore.clearErrors();
     return { studentsStore };
   },
   methods: {
@@ -83,10 +90,6 @@ export default {
       this.$emit('close');
     },
     async createOrUpdate() {
-      if (!this.valid) {
-        return;
-      }
-
       if (this.localStudent.id) {
         await this.studentsStore.update(
           new UpdateStudentDTO(this.localStudent)
@@ -96,7 +99,10 @@ export default {
           new CreateStudentDTO(this.localStudent)
         );
       }
-      this.$emit('close');
+
+      if (!this.studentsStore.hasError) {
+        this.closeDialog();
+      }
     },
   },
 };

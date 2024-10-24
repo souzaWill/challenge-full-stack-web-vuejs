@@ -7,7 +7,7 @@
       max-width="448"
       rounded="lg"
     >
-      <ErrorAlert :message="errorMessage" />
+      <ErrorAlert :message="authStore.error" />
 
       <form @submit.prevent="handleLogin">
         <div class="text-subtitle-1 text-medium-emphasis">
@@ -15,12 +15,16 @@
         </div>
 
         <v-text-field
-          required
           v-model="email"
           density="compact"
           :placeholder="$t('Email')"
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
+          :rules="[
+            (v) => !!v || $t('Email is required'),
+            (v) => /.+@.+\..+/.test(v) || $t('Email is invalid'),
+          ]"
+          :error-messages="authStore.errors.email"
         >
         </v-text-field>
 
@@ -31,7 +35,6 @@
         </div>
 
         <v-text-field
-          required
           v-model="password"
           :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
           :type="visible ? 'text' : 'password'"
@@ -40,6 +43,7 @@
           prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
           @click:append-inner="toggleVisible"
+          :error-messages="authStore.errors.password"
         >
         </v-text-field>
 
@@ -50,6 +54,7 @@
           color="blue"
           size="large"
           variant="tonal"
+          :rules="[(v) => !!v || $t('Password is required')]"
         >
           {{ $t('Log in') }}
         </v-btn>
@@ -68,7 +73,7 @@ export default {
       email: '',
       password: '',
       visible: false,
-      errorMessage: null,
+      errors: [],
     };
   },
   setup() {
@@ -80,8 +85,8 @@ export default {
   methods: {
     async handleLogin() {
       await this.authStore.login(this.email, this.password);
-      this.errorMessage = this.authStore.error;
-      this.errorMessage || this.router.push({ path: '/home' });
+      this.errors = this.authStore.errors;
+      this.hasError || this.router.push({ path: '/home' });
     },
     toggleVisible() {
       this.visible = !this.visible;

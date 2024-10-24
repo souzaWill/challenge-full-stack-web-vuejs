@@ -16,7 +16,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Gereciamento de Matriculas +A Educacao',
+      default: import.meta.env.VITE_APP_NAME,
     },
   },
   setup() {

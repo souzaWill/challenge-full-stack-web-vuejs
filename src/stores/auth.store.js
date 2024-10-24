@@ -5,7 +5,9 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token') || null,
     userName: localStorage.getItem('userName') || null,
-    error: null,
+    errors: [],
+    error: '',
+    hasError: false,
   }),
   actions: {
     setAuth(token, userName) {
@@ -20,15 +22,23 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('token');
       localStorage.removeItem('userName');
     },
+    setErrors(response) {
+      this.hasError = true;
+
+      if (response.status === 422) {
+        this.errors = response.data.errors;
+      } else {
+        this.error = response?.data?.message;
+      }
+    },
     async login(email, password) {
       try {
         const { data } = await authService.login(email, password);
         this.setAuth(data.token, data.name);
 
-        this.error = null;
-      } catch (err) {
-        //TODO: melhorar isso aqui
-        this.error = err.response?.data?.message || 'Erro ao fazer login';
+        this.errors = [];
+      } catch (error) {
+        this.setErrors(error.response);
       }
     },
     async logout() {
@@ -37,15 +47,9 @@ export const useAuthStore = defineStore('auth', {
         this.clearAuth();
 
         this.error = null;
-      } catch (err) {
-        alert(err);
-        //TODO: melhorar isso aqui
-        this.error = err.response?.data?.message || 'Erro ao fazer logout';
+      } catch (error) {
+        this.setErrors(error.response);
       }
     },
-  },
-  getters: {
-    isAuthenticated: (state) => !!state.token,
-    getUserName: (state) => state.userName,
   },
 });

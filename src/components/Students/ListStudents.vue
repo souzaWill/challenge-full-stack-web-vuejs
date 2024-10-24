@@ -84,13 +84,18 @@
         @close="closeConfirmDeleteDialog(true)"
       ></ConfirmDelete>
     </v-dialog>
+
+    <MessageSnackbar
+      v-if="studentsStore.notification.message"
+      :message="this.studentsStore.notification.message"
+      :color="this.studentsStore.notification.type"
+    ></MessageSnackbar>
   </v-container>
 </template>
 
 <script>
 import { useStudentsStore } from '@/stores/students.store';
 import { useI18n } from 'vue-i18n';
-import FormStudents from './FormStudents.vue';
 
 export default {
   data() {
@@ -111,9 +116,6 @@ export default {
       ],
     };
   },
-  components: {
-    FormStudents,
-  },
   setup() {
     const studentsStore = useStudentsStore();
     const { t } = useI18n();
@@ -122,13 +124,10 @@ export default {
   },
   methods: {
     async loadStudents({ page, itemsPerPage }) {
-      try {
-        itemsPerPage = itemsPerPage == -1 ? null : itemsPerPage;
-
-        await this.studentsStore.fetchStudents(page, itemsPerPage, this.search);
-      } catch (error) {
-        console.error(error);
-      }
+      this.loading = true;
+      itemsPerPage = itemsPerPage == -1 ? null : itemsPerPage;
+      await this.studentsStore.fetchStudents(page, itemsPerPage, this.search);
+      this.loading = false;
     },
     openCreateDialog() {
       this.createDialog = true;
