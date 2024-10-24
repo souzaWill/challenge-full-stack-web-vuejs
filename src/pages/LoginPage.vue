@@ -86,7 +86,7 @@ export default {
     async handleLogin() {
       await this.authStore.login(this.email, this.password);
       this.errors = this.authStore.errors;
-      this.hasError || this.router.push({ path: '/home' });
+      this.authStore.hasError || this.router.push({ path: '/home' });
     },
     toggleVisible() {
       this.visible = !this.visible;
