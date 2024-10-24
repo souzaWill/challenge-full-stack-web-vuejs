@@ -19,11 +19,16 @@
   "Confirmation": "Confirmação",
   "Confirm": "Confirmar",
   "Cancel": "Cancelar",
+  "Close": "Fechar",
   "Registration number is required": "RA é obrigatório",
   "Registration number must be 8 characters long": "RA deve ter 8 caracteres",
   "CPF number is required": "CPF é obrigatório",
   "Email is required": "Email é obrigatório",
   "Email is invalid": "Email é invalido",
   "Name is required": "Nome é obrigatório",
-  "Password is required" : "senha é obrigatório"
+  "Password is required": "senha é obrigatório",
+  "Item created successfully!": "Item criado com sucesso!",
+  "Item updated successfully!": "Item atualizado com sucesso!",
+  "Item deleted successfully!": "Item apagado com sucesso!",
+  "An unexpected error occurred. Please try again later.": "Ocorreu um erro inesperado. Por favor, tente novamente mais tarde."
 }

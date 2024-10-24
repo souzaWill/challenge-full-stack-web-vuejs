@@ -7,7 +7,7 @@
       max-width="448"
       rounded="lg"
     >
-      <ErrorAlert v-for="(message, index) in errors" :key="index" :message="message" />
+      <ErrorAlert :message="authStore.error" />
 
       <form @submit.prevent="handleLogin">
         <div class="text-subtitle-1 text-medium-emphasis">
@@ -20,6 +20,11 @@
           :placeholder="$t('Email')"
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
+          :rules="[
+            (v) => !!v || $t('Email is required'),
+            (v) => /.+@.+\..+/.test(v) || $t('Email is invalid'),
+          ]"
+          :error-messages="authStore.errors.email"
         >
         </v-text-field>
 
@@ -38,10 +43,7 @@
           prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
           @click:append-inner="toggleVisible"
-          :rules="[
-            (v) => !!v || $t('Email is required'),
-            (v) => /.+@.+\..+/.test(v) || $t('Email is invalid'),
-          ]"
+          :error-messages="authStore.errors.password"
         >
         </v-text-field>
 
@@ -52,9 +54,7 @@
           color="blue"
           size="large"
           variant="tonal"
-          :rules="[
-            (v) => !!v || $t('Password is required'),
-          ]"
+          :rules="[(v) => !!v || $t('Password is required')]"
         >
           {{ $t('Log in') }}
         </v-btn>
@@ -86,7 +86,7 @@ export default {
     async handleLogin() {
       await this.authStore.login(this.email, this.password);
       this.errors = this.authStore.errors;
-      this.errors.length > 0 || this.router.push({ path: '/home' });
+      this.hasError || this.router.push({ path: '/home' });
     },
     toggleVisible() {
       this.visible = !this.visible;

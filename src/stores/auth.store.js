@@ -6,6 +6,8 @@ export const useAuthStore = defineStore('auth', {
     token: localStorage.getItem('token') || null,
     userName: localStorage.getItem('userName') || null,
     errors: [],
+    error: '',
+    hasError: false,
   }),
   actions: {
     setAuth(token, userName) {
@@ -21,11 +23,12 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('userName');
     },
     setErrors(response) {
+      this.hasError = true;
+
       if (response.status === 422) {
-        this.errors = response.data.errors
-      }
-      else {
-        this.errors = [response?.data?.message] || ['Erro ao fazer login']
+        this.errors = response.data.errors;
+      } else {
+        this.error = response?.data?.message;
       }
     },
     async login(email, password) {
@@ -35,7 +38,7 @@ export const useAuthStore = defineStore('auth', {
 
         this.errors = [];
       } catch (error) {
-        this.setErrors(error.response)
+        this.setErrors(error.response);
       }
     },
     async logout() {
@@ -45,12 +48,8 @@ export const useAuthStore = defineStore('auth', {
 
         this.error = null;
       } catch (error) {
-        this.setErrors(error.response)
+        this.setErrors(error.response);
       }
     },
   },
-  // getters: {
-  //   isAuthenticated: (state) => !!state.token,
-  //   getUserName: (state) => state.userName,
-  // },
 });
