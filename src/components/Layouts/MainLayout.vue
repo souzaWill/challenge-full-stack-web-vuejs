@@ -5,7 +5,7 @@
     <v-navigation-drawer app v-model="drawer" color="primary lighten-4">
       <v-list>
         <v-list-item link @click="navigate('/home')">
-          <v-list-item-title>{{ $t("Students") }}</v-list-item-title>
+          <v-list-item-title>{{ $t('Students') }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {

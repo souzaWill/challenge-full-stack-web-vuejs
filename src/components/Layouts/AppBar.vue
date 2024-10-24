@@ -4,19 +4,19 @@
     <v-toolbar-title>{{ title }}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn text @click="logout">
-      {{ $t("Logout") }}
+      {{ $t('Logout') }}
     </v-btn>
   </v-app-bar>
 </template>
 
 <script>
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth.store";
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth.store';
 export default {
   props: {
     title: {
       type: String,
-      default: "Gereciamento de Matriculas +A Educacao",
+      default: 'Gereciamento de Matriculas +A Educacao',
     },
   },
   setup() {
@@ -30,7 +30,7 @@ export default {
       try {
         await this.authStore.logout();
         this.errorMessage = this.authStore.error;
-        this.errorMessage || this.router.push({ path: "/login" });
+        this.errorMessage || this.router.push({ path: '/login' });
       } catch (error) {
         console.error(error);
       }
