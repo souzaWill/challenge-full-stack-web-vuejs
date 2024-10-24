@@ -6,6 +6,7 @@ export const useStudentsStore = defineStore('students', {
   state: () => ({
     students: [],
     totalItems: 0,
+    itemsPerPage: 10,
     errors: [],
     error: '',
     hasError: false,
@@ -34,15 +35,16 @@ export const useStudentsStore = defineStore('students', {
     clearMessage() {
       this.notification = {};
     },
-    async fetchStudents(page, per_page, search) {
+    async fetchStudents(page,search) {
       try {
+
         const { data, meta } = await studentsService.get({
           page,
-          per_page,
+          per_page: this.itemsPerPage,
           search,
         });
         this.students = StudentDTO.fromArray(data);
-        this.totalItems = per_page == null ? this.students.length : meta?.total;
+        this.totalItems =  this.itemsPerPage == null ? this.students.length : meta?.total;
       } catch (error) {
         this.setMessage(
           'An unexpected error occurred. Please try again later.',

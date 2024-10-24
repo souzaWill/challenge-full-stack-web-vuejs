@@ -31,12 +31,16 @@ export const useAuthStore = defineStore('auth', {
         this.error = response?.data?.message;
       }
     },
+    clearErrors() {
+      this.hasError = false;
+      this.errors = [];
+    },
     async login(email, password) {
       try {
+        this.clearErrors()
         const { data } = await authService.login(email, password);
         this.setAuth(data.token, data.name);
 
-        this.errors = [];
       } catch (error) {
         this.setErrors(error.response);
       }

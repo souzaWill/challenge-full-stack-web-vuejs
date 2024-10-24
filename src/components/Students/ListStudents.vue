@@ -43,7 +43,7 @@
                 <v-data-table-server
                   :headers="headers"
                   :items="studentsStore.students"
-                  v-model:items-per-page="itemsPerPage"
+                  v-model:items-per-page="studentsStore.itemsPerPage"
                   :items-length="studentsStore.totalItems"
                   :loading="loading"
                   @update:options="loadStudents"
@@ -101,7 +101,6 @@ export default {
   data() {
     return {
       search: '',
-      itemsPerPage: 10,
       loading: false,
       createDialog: false,
       editDialog: false,
@@ -123,10 +122,10 @@ export default {
     return { studentsStore, t };
   },
   methods: {
-    async loadStudents({ page, itemsPerPage }) {
+    async loadStudents({ page }) {
       this.loading = true;
-      itemsPerPage = itemsPerPage == -1 ? null : itemsPerPage;
-      await this.studentsStore.fetchStudents(page, itemsPerPage, this.search);
+      this.studentsStore.itemsPerPage = this.studentsStore.itemsPerPage == -1 ? null : this.studentsStore.itemsPerPage;
+      await this.studentsStore.fetchStudents(page, this.search);
       this.loading = false;
     },
     openCreateDialog() {
@@ -143,19 +142,19 @@ export default {
     closeCreateDialog(reload = false) {
       this.createDialog = false;
       if (reload) {
-        this.loadStudents({ page: 1, itemsPerPage: this.itemsPerPage });
+        this.loadStudents({ page: 1 });
       }
     },
     closeEditDialog(reload = false) {
       this.editDialog = false;
       if (reload) {
-        this.loadStudents({ page: 1, itemsPerPage: this.itemsPerPage });
+        this.loadStudents({ page: 1 });
       }
     },
     closeConfirmDeleteDialog(reload = false) {
       this.confirmDeleteDialog = false;
       if (reload) {
-        this.loadStudents({ page: 1, itemsPerPage: this.itemsPerPage });
+        this.loadStudents({ page: 1 });
       }
     },
   },
