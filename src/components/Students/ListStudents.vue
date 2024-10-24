@@ -24,7 +24,7 @@
   
                 <v-col align-self="end" cols="12" sm="4">
                   <v-btn block class="mb-8" color="blue" size="large" variant="tonal" @click="openCreateDialog()">
-                    Novo Estudante
+                    {{$t("Create student")}}
                   </v-btn>
                 </v-col>
               </v-row>

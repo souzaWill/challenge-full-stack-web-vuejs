@@ -28,7 +28,7 @@
             ]"
           ></v-text-field>
           <v-text-field 
-            :label="$t('CPF')"
+            :label="$t('Document')"
             v-model="localStudent.document" 
             :readonly="!!localStudent.id"
             v-mask="'###.###.###-##'"
@@ -39,8 +39,8 @@
   
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="closeDialog">Cancelar</v-btn>
-        <v-btn color="blue darken-1" text @click="createOrUpdate">Salvar</v-btn>
+        <v-btn color="blue darken-1" text @click="closeDialog">{{ $t('Cancel') }}</v-btn>
+        <v-btn color="blue darken-1" text @click="createOrUpdate">{{ $t('Confirm') }}</v-btn>
       </v-card-actions>
     </v-card>
   </template>

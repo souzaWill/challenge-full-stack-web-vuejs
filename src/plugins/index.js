@@ -19,7 +19,7 @@ const i18n = createI18n({
 });
 const pinia = createPinia()
 
-axios.defaults.baseURL = 'http://localhost/api/'
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
 axios.defaults.headers.common['Accept'] = "application/json";
 axios.defaults.headers.common['Content-Type'] = "application/json";
 axios.defaults.headers.common['responseType'] = "json";
